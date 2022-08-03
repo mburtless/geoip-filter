@@ -13,5 +13,5 @@ geoip-filter:
 	@cargo build --package geoip-filter --target wasm32-unknown-unknown --release
 
 .PHONY: singleton-service
-geoip-filter:
+singleton-service:
 	@cargo build --package singleton-service --target wasm32-unknown-unknown --release

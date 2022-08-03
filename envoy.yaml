@@ -1,7 +1,20 @@
 admin:
   address:
     socket_address: { address: 0.0.0.0, port_value: 9901 }
-
+bootstrap_extensions:
+- name: envoy.bootstrap.wasm
+  typed_config:
+    '@type': type.googleapis.com/envoy.extensions.wasm.v3.WasmService
+    singleton: true
+    config:
+      name: singleton_service
+      root_id: singleton_service
+      vm_config:
+        runtime: envoy.wasm.runtime.v8
+        vm_id: geoip_vm
+        code:
+          local:
+            filename: /etc/singleton_service.wasm
 static_resources:
   listeners:
     - name: geopip-filter
@@ -35,6 +48,7 @@ static_resources:
                         root_id: geoip_filter
                         vm_config:
                           runtime: envoy.wasm.runtime.v8
+                          vm_id: geoip_vm
                           code:
                             local:
                               filename: /etc/geoip_filter.wasm

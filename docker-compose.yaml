@@ -5,6 +5,7 @@ services:
     volumes:
       - ./envoy.yaml:/etc/envoy.yaml
       - ./target/wasm32-unknown-unknown/release/geoip_filter.wasm:/etc/geoip_filter.wasm
+      - ./target/wasm32-unknown-unknown/release/singleton_service.wasm:/etc/singleton_service.wasm
     ports:
       - 10000:10000 # httpbin listener
       - 9901:9901 # admin server

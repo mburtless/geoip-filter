@@ -65,7 +65,6 @@ pub fn _start() {
 
 impl<T: 'static + Host + Clone> RootContext for RootHandler<T> {
     fn on_vm_start(&mut self, _vm_configuration_size: usize) -> bool {
-        // tick immediately to obtain maxmind db
         true
     }
 
