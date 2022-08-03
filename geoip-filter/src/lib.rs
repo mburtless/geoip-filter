@@ -4,7 +4,7 @@ use log::{trace};
 use proxy_wasm as wasm;
 use proxy_wasm::traits::*;
 use proxy_wasm::types::*;
-use host::*;
+use common::*;
 
 
 

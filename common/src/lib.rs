@@ -1,6 +1,9 @@
 use std::time::{SystemTime};
 use proxy_wasm as wasm;
 
+pub const SHARED_MEMORY_KEY: &str = "SHARED_MEMORY";
+pub const SHARED_MEMORY_INITIAL_SIZE: u64 = 1000;
+
 pub trait Host {
     fn debug(&self, msg: &str);
     fn info(&self, msg: &str);

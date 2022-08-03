@@ -10,4 +10,10 @@ services:
       - 10000:10000 # httpbin listener
       - 9901:9901 # admin server
   httpbin:
-    image: kennethreitz/httpbin
+    image: kennethreitz/httpbin:latest
+  mmdb:
+    image: halverneus/static-file-server:latest
+    volumes:
+      - ./GeoLite2-Country.mmdb:/web/GeoLite2-Country.mmdb
+    ports:
+      - 8080:8080 # http server

@@ -9,6 +9,13 @@ bootstrap_extensions:
     config:
       name: singleton_service
       root_id: singleton_service
+      configuration:
+        "@type": type.googleapis.com/google.protobuf.StringValue
+        value: |
+          {
+            "mmdb_url": "http://mmdb:8080/GeoLite2-Country.mmdb",
+            "mmdb_cluster": "mmdb"
+          }
       vm_config:
         runtime: envoy.wasm.runtime.v8
         vm_id: geoip_vm
@@ -70,3 +77,15 @@ static_resources:
                     socket_address:
                       address: httpbin
                       port_value: 80
+    - name: mmdb
+      type: LOGICAL_DNS
+      lb_policy: ROUND_ROBIN
+      load_assignment:
+        cluster_name: mmdb
+        endpoints:
+          - lb_endpoints:
+            - endpoint:
+                address:
+                  socket_address:
+                    address: mmdb
+                    port_value: 8080
