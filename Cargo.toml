@@ -3,4 +3,5 @@
 members = [
 	"geoip-filter",
 	"singleton-service",
+	"host",
 ]
