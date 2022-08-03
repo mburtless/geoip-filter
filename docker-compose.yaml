@@ -1,0 +1,12 @@
+services:
+  proxy:
+    image: envoyproxy/envoy-dev:latest
+    command: ["--component-log-level", "wasm:debug", "-c", "/etc/envoy.yaml"]
+    volumes:
+      - ./envoy.yaml:/etc/envoy.yaml
+      - ./target/wasm32-unknown-unknown/release/geoip_filter.wasm:/etc/geoip_filter.wasm
+    ports:
+      - 10000:10000 # httpbin listener
+      - 9901:9901 # admin server
+  httpbin:
+    image: kennethreitz/httpbin
