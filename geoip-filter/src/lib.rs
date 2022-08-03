@@ -1,7 +1,9 @@
 mod config;
 
+use std::time::Duration;
 use log::{trace};
 use proxy_wasm as wasm;
+use proxy_wasm::hostcalls::get_shared_data;
 use proxy_wasm::traits::*;
 use proxy_wasm::types::*;
 use common::*;
@@ -40,7 +42,26 @@ pub fn _start() {
 
 impl<T: 'static + Host + Clone> RootContext for RootHandler<T> {
     fn on_vm_start(&mut self, _vm_configuration_size: usize) -> bool {
+        // tick immediately to obtain maxmind db
+        self.set_tick_period(Duration::from_millis(1000));
         true
+    }
+
+    fn on_tick(&mut self) {
+        if !self.maxmind_db_ready {
+            self.host.info("mmdb not yet loaded into worker, attempting to load");
+            // attempt to load mmdb from shared mem
+            match self.get_shared_data(SHARED_MEMORY_KEY) {
+                (Some(_cache), _) => {
+                    self.host.info("mmdb loaded from shared memory");
+                    self.maxmind_db_ready = true;
+                    self.set_tick_period(Duration::from_secs(60 * 30)); // Tick every 30 minutes.
+                }
+                (None, _) => {
+                    self.host.warn("mmdb is missing from cache");
+                }
+            }
+        }
     }
 
     fn create_http_context(&self, _context_id: u32) -> Option<Box<dyn HttpContext>> {

@@ -40,14 +40,14 @@ impl <T: 'static + Host + Clone> RootContext for SingletonService<T> {
         self.host.info("VM instantiated");
 
         // Initialize shared memory to store maxmind db
-        if let Err(e) = set_shared_data(
+        /*if let Err(e) = set_shared_data(
             SHARED_MEMORY_KEY,
             Some(&SHARED_MEMORY_INITIAL_SIZE.to_be_bytes()),
             None,
         ) {
             self.host.error(format!("Initializing shared memory key failed: {:?}", e).as_str());
             return false;
-        }
+        }*/
 
         true
     }
@@ -86,13 +86,22 @@ impl <T: Host + Clone> Context for SingletonService<T> {
         _num_trailers: usize,
     ) {
         if let Some(body) = self.get_http_call_response_body(0, _body_size) {
-            if let Ok(body) = std::str::from_utf8(&body) {
-                /*let _ = proxy_wasm::hostcalls::log(
-                    LogLevel::Info,
-                    format!("HTTP Call Response : {:?}", body).as_str(),
-                );*/
-                self.host.info(format!("HTTP Call Response : {:?}", body).as_str());
+            if !body.is_empty() {
+                self.host.info("HTTP call response received");
+                // init reader with body
+                //let reader = maxminddb::Reader::from_source(body);
+
+                // persist to shared data
+                if let Err(e) = set_shared_data(
+                    SHARED_MEMORY_KEY,
+                    Some(&*body),
+                    None,
+                ) {
+                    self.host.error(format!("persisting mmdb to shared memory failed: {:?}", e).as_str());
+                }
+                return;
             }
+            self.host.error("HTTP call failed");
         }
     }
 }

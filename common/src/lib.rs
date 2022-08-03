@@ -2,6 +2,7 @@ use std::time::{SystemTime};
 use proxy_wasm as wasm;
 
 pub const SHARED_MEMORY_KEY: &str = "SHARED_MEMORY";
+pub const MMDB_READY_KEY: &str = "MMDB_READY";
 pub const SHARED_MEMORY_INITIAL_SIZE: u64 = 1000;
 
 pub trait Host {
