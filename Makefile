@@ -7,7 +7,14 @@ build:
 	@echo "Building geoip-filter and singleton-service"
 	@make geoip-filter
 	@make singleton-service
-	@test -f "./GeoLite2-Country.mmdb" || echo "Waring: GeoLite2-Country.mmdb missing, this must be present in root dir to run locally!"
+
+.PHONY: run
+run:
+ifneq ("$(wildcard ./GeoLite2-Country.mmdb)","")
+	@docker-compose up -d
+else
+	@echo "Waring: GeoLite2-Country.mmdb missing, this must be present in root dir to run locally!"
+endif
 
 .PHONY: geoip-filter
 geoip-filter:
