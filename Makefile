@@ -7,6 +7,7 @@ build:
 	@echo "Building geoip-filter and singleton-service"
 	@make geoip-filter
 	@make singleton-service
+	@test -f "./GeoLite2-Country.mmdb" || echo "Waring: GeoLite2-Country.mmdb missing, this must be present in root dir to run locally!"
 
 .PHONY: geoip-filter
 geoip-filter:
