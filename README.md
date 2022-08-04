@@ -40,7 +40,7 @@ to use country DB.
 
 ```shell
 # bring up Envoy, httpbin and webserver hosting GeoLite2 mmdb
-docker-compose up -d
+make run
 
 # test via httpbin. Spoof IP by manually setting XFF header and note x-country-code in response
 # US IP
