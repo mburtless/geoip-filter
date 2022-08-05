@@ -7,7 +7,7 @@ WASM filter for Envoy that adds GeoIP data to HTTP requests
 1. On start of WASM VM the singleton service fetches the MaxMind DB from the web server.
 2. Singleton service persists MaxMind DB to WASM VM shared storage.
 3. Each worker thread's GeoIP Filter process loads the MaxMind DB from shared storage when it's available and uses it to initialize a MaxMind Reader.
-4. Incoming request from downstream is intercepted by GeoIP Filter in filter chain.  GeoIP Filter uses Reader to lookup geoip data of request IP and append's geoip data to request headers.
+4. Incoming request from downstream is intercepted by GeoIP Filter in filter chain.  GeoIP Filter uses Reader to lookup geoip data of request IP and appends geoip data to request headers.
 5. GeoIP Filter signals Envoy to continue processing request down filter chain.
 6. Router filter routes request to correct upstream.
 
